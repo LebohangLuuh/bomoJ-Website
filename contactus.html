@@ -53,22 +53,24 @@
       <div class="row py-3 mt-5">
           <div class="col-md-6 first_col mb-5">
               <form class="p-4 mt-2 " >
-                  <div class="mb-3">
-                      <label for="exampleFormControlInput1" class="form-label">Enter your Name</label>
-                      <input type="text" class="form-control" id="exampleFormControlInput1">
-                  </div>
-                  <div class="mb-3">
-                      <label for="exampleFormControlInput1" class="form-label">Email ID</label>
-                      <input type="text" class="form-control" id="exampleFormControlInput1">
-                  </div>
-                  <div class="mb-3">
-                      <label for="exampleFormControlTextarea1" class="form-label">Enter your massage</label>
-                      <textarea  type="text" class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
-                  </div>
-                  <div class="mb-3">
-                      <button class="btn btn-primary">Send Now</button>
-                  </div>
-              </form>
+                <div class="mb-3">
+                  <label for="nameInput" class="form-label">Enter your Name</label>
+                  <input type="text" class="form-control" id="nameInput" placeholder="Enter your full name - E.g. Justice Tau">
+                  <span id="nameError" class="text-danger"></span>
+                </div>
+              <div class="mb-3">
+                <label for="emailInput" class="form-label">Email ID</label>
+                <input type="text" class="form-control" id="emailInput" placeholder="Enter your E-mail address - E.g. example@gmail.com">
+                <span id="emailError" class="text-danger"></span>
+              </div>
+              <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Enter your massage</label>
+                <textarea  type="text" class="form-control" required id="exampleFormControlTextarea1"  placeholder="Enter your message here..." rows="5"></textarea>
+              </div>
+              <div class="mb-3">
+                <button onclick="validateForm()" class="btn btn-primary">Submit</button>
+              </div>
+            </form>
           </div>
           <div class="col-md-6 sec_col " style="z-index: -1;">
               <img src="img_&_Vids/cont img.jpg"
@@ -76,7 +78,7 @@
           </div>
       </div>
   </div>
-  </div>
+</div>
   
 <br><br>
 
@@ -112,6 +114,8 @@
     <p class="display-4 text-center pb-3" style="color: #00a8e8; font-weight: 400; font-size: large;">2023 |<a href="https://lebohangluuh.github.io/LP-Mofokeng-profile" target="_blank">Lebohang Mofokeng </a> | Copyright ©</p>
   </div>
 </div>
+
+<script src="img_&_Vids/form.js"></script>
     <!-- Bootstrap JS and Popper.js -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
