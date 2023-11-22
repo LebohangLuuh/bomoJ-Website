@@ -1,2 +1,2 @@
-# bomojay-Website
- updated vision of bomojay
+# bomojay-prototype
+bomojay sample website layout
