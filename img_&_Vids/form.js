@@ -5,7 +5,7 @@ function validateForm() {
     const emailInput = document.getElementById('emailInput').value;
     const messageInput = document.getElementById('exampleFormControlTextarea1').value.trim();
 
-    // Regular expression to validate name without numbers and length
+    // Regular expression to validate name without numbers
     const nameRegex = /^[A-Za-z\s]+$/;
     const validNameLength = nameInput.length >= 3 && nameInput.length <= 50;
 
@@ -34,11 +34,65 @@ function validateForm() {
         return false;
     }
 
-    // Optional success message
     alert('Form submitted successfully!');
-
-    // Returning true allows the form to submit
     return true;
 }
 
 
+// for events page
+
+const eventsContainer = document.getElementById('events-container');
+
+// Fetch and display events
+function fetchAndDisplayEvents() {
+  db.collection('events').get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        const eventData = doc.data();
+        const eventElement = document.createElement('div');
+        eventElement.classList.add('event');
+        eventElement.innerHTML = `
+          <h2>${eventData.event_title}</h2>
+          <p>Date: ${eventData.event_date}</p>
+          <p>${eventData.event_description}</p>
+        `;
+        eventsContainer.appendChild(eventElement);
+      });
+    })
+    .catch((error) => {
+      console.log('Error getting documents: ', error);
+    });
+}
+
+// Call the function when the page loads
+window.addEventListener('load', fetchAndDisplayEvents);
+
+
+// Assuming you have a form with the ID 'eventForm'
+
+const eventForm = document.getElementById('eventForm');
+
+eventForm.addEventListener('submit', function(event) {
+  event.preventDefault(); // Prevent form submission
+
+  // Get form data
+  const eventTitle = document.getElementById('eventTitle').value;
+  const eventDate = document.getElementById('eventDate').value;
+  const eventDescription = document.getElementById('eventDescription').value;
+  const eventImg = document.getElementById('selectedImage')
+
+  // Add the event to Firestore
+  db.collection('events').add({
+    event_title: eventTitle,
+    event_date: eventDate,
+    event_description: eventDescription,
+    event_Img : eventImg
+  })
+  .then((docRef) => {
+    console.log('Event added with ID: ', docRef.id);
+    // You might want to display a success message or redirect the user
+  })
+  .catch((error) => {
+    console.error('Error adding event: ', error);
+  });
+});

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <title>BOMOJAY</title>
+    <style>
+      .navbar-nav {
+        margin-left: auto;
+      }
+    </style>
+    <link rel="stylesheet" href="navlink.css">
+  </head>
+<body>
+
+<!-- First Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-light sticky-top" style="background-color: white;">
+  <img src="img_&_Vids/logo bomojay.png" style="height: 75px; " alt="company Logo">
+  <a class="display-2 navbar-brand col-6" style="color: #008000; font-size: 35px;" href="index.html">BOMOJAY</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav m-sm-auto">
+      <li class="nav-item">
+        <a class="nav-link " href="index.html">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link"   href="about_bomojay.html">About</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="Service.html">Events</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="contactus.html">Contact</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="Gallery.html">Gallery</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link active" style="color: #00a8e8;" href="adminPage.html">Post Event</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<h1 class="display-3 text-center pb-3" style="color: #bfd8bd; background-color: #054a29;">Post Event</h1>
+<!--  -->
+
+<div class="container mt-5 mb-4">
+  <!-- <form action="post_event.php" method="POST" enctype="multipart/form-data"> -->
+    <div class="row">
+          <div class="col-md-5">
+              <div class="form-group">
+                  <label for="eventImage" class="display-4" style="font-size: x-large; color: #054a29; font-weight: 400;">Choose Event Image</label>
+                  <input type="file" class="form-control-file" id="eventImage" name="event_image" onchange="previewImage(event)">
+              </div>
+              <img src="#" alt="Selected Image" id="selectedImage" class="img-fluid mt-3" style="display: none;">
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="eventTitle">Event Title</label>
+              <input type="text" class="form-control" id="eventTitle" name="event_title" required>
+          </div>
+          <div class="form-group">
+            <label for="eventDate">Event Date</label>
+            <input type="date" class="form-control" id="eventDate" name="event_date" required>
+            <small id="dateError" class="text-danger" style="display: none;">Event date should not be older than current date.</small>
+          </div>
+          
+          <script>
+            const eventDateInput = document.getElementById('eventDate');
+          
+            // Validate date on form submission
+            function validateDate() {
+              const selectedDate = new Date(eventDateInput.value);
+              const currentDate = new Date();
+          
+              if (selectedDate < currentDate) {
+                document.getElementById('dateError').style.display = 'block';
+                return false;
+              } else {
+                document.getElementById('dateError').style.display = 'none';
+                return true;
+              }
+            }
+          
+            document.querySelector('form').addEventListener('submit', function(event) {
+              if (!validateDate()) {
+                event.preventDefault();
+              }
+            });
+          </script>
+          
+          <div class="form-group">
+              <label for="eventDescription">Event Description</label>
+              <textarea class="form-control" id="eventDescription" name="event_description" rows="4" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary align-content-end">Post Event</button>
+          </div>
+      </div>
+    
+  </form>
+</div>
+<script>
+  function previewImage(event) {
+      const selectedImage = document.getElementById('selectedImage');
+      selectedImage.style.display = 'block';
+      selectedImage.src = URL.createObjectURL(event.target.files[0]);
+  }
+</script>
+
+
+<!-- Add this script to fetch events and display them -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCzjk-kIPaq0-XcM182Bx-2h7eY7DkrwCw",
+        authDomain: "bomojay-site.firebaseapp.com",
+        projectId: "bomojay-site",
+        storageBucket: "bomojay-site.appspot.com",
+        messagingSenderId: "850926706595",
+        appId: "1:850926706595:web:7d395a3fb00ac150d30416",
+        measurementId: "G-YF3Z90XTQ1"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  // Function to fetch events from Firestore and display them
+  function fetchAndDisplayEvents() {
+    const eventsContainer = document.getElementById('events-container');
+
+    db.collection('events').get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          const eventData = doc.data();
+          const eventElement = document.createElement('div');
+          eventElement.classList.add('event');
+          eventElement.innerHTML = `
+            <h2>${eventData.event_title}</h2>
+            <p>Date: ${eventData.event_date}</p>
+            <p>${eventData.event_description}</p>
+          `;
+          eventsContainer.appendChild(eventElement);
+        });
+      })
+      .catch((error) => {
+        console.log('Error getting documents: ', error);
+      });
+  }
+
+  // Call the function when the page loads
+  window.addEventListener('load', fetchAndDisplayEvents);
+</script>
+
+<!-- footer -->
+
+<div class="jumbotron-fluid pt-0">
+    <div class="container-fluid" style="background-color: #054a29; width: 100%; height:max-content;">
+      <div class="row text-center pt-4" >
+        <div class="col-sm-6 ">
+          <h5 class="display-4" style="color: #bfd8bd; font-size: xx-large; font-weight: 300;">Get Directions</h5>
+            <i class="fas fa-map-marker-alt" style="color: #00a8e8;"></i> <!-- Icon for address -->
+            <a href="https://www.google.com/maps/dir/?api=1&destination=Extension+5+kopanong,+Soshanguve+-+,+Pretoria,+0152"
+            target="_blank"> Extension 5 kopanong <br> Soshanguve Pretoria <br> 0152</a>
+          
+        </div>
+        <div class="col-sm-6 ">
+          <h5 class="display-4" style="color: #bfd8bd; font-size: xx-large; font-weight: 300;">CONTACT</h5>
+          <a href="mailto:bomojaytravelandtours@yahoo.com">
+            <i class="fas fa-envelope"></i> bomojaytravelandtours@yahoo.com <br> </a>
+          <a href="tel:072 341 1622">
+            <i class="fas fa-phone"></i> 072 341 1622 </a> <a style="color: #00a8e8;">  |  </a>
+          <a href="tel:079 305 6466">
+           079 305 6466</a>
+            <br>
+            <a href="https://www.facebook.com/profile.php?id=100094248556071" target="_blank" style="margin-right: 10px; font-size: 24px;"><i class="fab fa-facebook"></i></a>
+            <a href="" style="margin-right: 10px; font-size: 24px; color: orange;"><i class="fab fa-instagram"></i></a>
+            <a href="" style="margin-right: 10px; font-size: 24px; color: aqua;"><i class="fab fa-twitter"></i></a>
+            <a href="https://chat.whatsapp.com/CKRcaxsGVTx7Ou915qTPKb" style="font-size: 24px; color: white;"><i class="fab fa-whatsapp"></i></a>
+            
+        </div>
+      </div>
+      <hr style="border-color: #00a8e8;">
+      <p class="display-4 text-center pb-3" style="color: #00a8e8; font-weight: 400; font-size: large;">2023 |<a href="https://lebohangluuh.github.io/LP-Mofokeng-profile" target="_blank">Lebohang Mofokeng </a> | Copyright ©</p>
+    </div>
+  </div>
+  
+      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+      </body>
+  </html>

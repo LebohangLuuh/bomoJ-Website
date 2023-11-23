@@ -42,50 +42,19 @@
       <li class="nav-item">
         <a class="nav-link" href="Gallery.html">Gallery</a>
       </li>
+
+      <li class="nav-item">
+        <a class="nav-link " href="adminPage.html">Post Event</a>
+      </li>
     </ul>
   </div>
 </nav>
 
 <h1 class="display-3 text-center " style="color: #bfd8bd; background-color: #054a29; padding-bottom: 10px;;">Upcoming Events</h1>
 
-<div class="container mt-5"  >
-  <div class="container pb-4">
-</div>
-  <div class="card" >
-    <div class="card-body">
-      <h5 class="card-title" style="color: white;">Trip to City A</h5>
-      <p class="card-text" style="color: white;">Date: November 20, 2023</p>
-      <p class="card-text" style="color: white;">Departure Time: 10:00 AM</p>
-      <p class="card-text" style="color: white;" >From: City X to City A</p>
-      <button class="btn btn-primary" onclick="addToCalendar('Trip to City A')">Add to Calendar</button>
-      <button class="btn btn-success ml-2" onclick="countPeople('Trip to City A')">Add Me</button>
-    </div>
-  </div>
+<!-- Add this div where events will be displayed -->
+<div id="events-container" class="container mt-5 mb-4"></div>
 
-  <div class="card mt-3" >
-    <div class="card-body">
-      <h5 class="card-title">Trip to City B</h5>
-      <p class="card-text">Date: November 25, 2023</p>
-      <p class="card-text">Departure Time: 1:00 PM</p>
-      <p class="card-text">From: City Y to City B</p>
-      <button class="btn btn-primary" onclick="addToCalendar('Trip to City B')">Add to Calendar</button>
-      <button class="btn btn-success ml-2" onclick="countPeople('Trip to City B')">Add Me</button>
-    </div>
-  </div>
-</div>
-
-
-<script>
-function addToCalendar(tripName) {
-  // Simulate adding to calendar (you can replace this with your calendar integration)
-  alert("Added to calendar: " + tripName);
-}
-
-function countPeople(tripName) {
-  // Simulate counting people (you can replace this with your user tracking logic)
-  alert("You've been counted for the trip: " + tripName);
-}
-</script>
 
 
 <!-- footer -->
@@ -96,7 +65,7 @@ function countPeople(tripName) {
       <div class="col-sm-6 ">
         <h5 class="display-4" style="color: #bfd8bd; font-size: xx-large; font-weight: 300;">Get Directions</h5>
           <i class="fas fa-map-marker-alt" style="color: #00a8e8;"></i> <!-- Icon for address -->
-          <a href="https://www.google.com/maps/dir/?api=1&destination=Tsweu+St,+Mamelodi+-+SAS,+Pretoria,+0122"
+          <a href="https://www.google.com/maps/dir/?api=1&destination=Extension+5+kopanong,+Soshanguve+-+,+Pretoria,+0152"
             target="_blank"> Extension 5 kopanong <br> Soshanguve Pretoria <br> 0152</a>
         
       </div>
@@ -120,6 +89,31 @@ function countPeople(tripName) {
     <p class="display-4 text-center pb-3" style="color: #00a8e8; font-weight: 400; font-size: large;">2023 |<a href="https://lebohangluuh.github.io/LP-Mofokeng-profile" target="_blank">Lebohang Mofokeng </a> | Copyright ©</p>
   </div>
 </div>
+
+<!-- firebase copied code , dont edit --> 
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyCzjk-kIPaq0-XcM182Bx-2h7eY7DkrwCw",
+        authDomain: "bomojay-site.firebaseapp.com",
+        projectId: "bomojay-site",
+        storageBucket: "bomojay-site.appspot.com",
+        messagingSenderId: "850926706595",
+        appId: "1:850926706595:web:7d395a3fb00ac150d30416",
+        measurementId: "G-YF3Z90XTQ1"
+      };
+      
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);</script>
+
+
+<script src="img_&_Vids/form.js"></script>
 
 <!-- Bootstrap JS and Popper.js -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
