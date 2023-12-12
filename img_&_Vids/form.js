@@ -41,31 +41,9 @@ function validateForm() {
 
 // for events page
 
-const eventsContainer = document.getElementById('events-container');
 
-// Fetch and display events
-function fetchAndDisplayEvents() {
-  db.collection('events').get()
-    .then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        const eventData = doc.data();
-        const eventElement = document.createElement('div');
-        eventElement.classList.add('event');
-        eventElement.innerHTML = `
-          <h2>${eventData.event_title}</h2>
-          <p>Date: ${eventData.event_date}</p>
-          <p>${eventData.event_description}</p>
-        `;
-        eventsContainer.appendChild(eventElement);
-      });
-    })
-    .catch((error) => {
-      console.log('Error getting documents: ', error);
-    });
-}
 
-// Call the function when the page loads
-window.addEventListener('load', fetchAndDisplayEvents);
+
 
 
 // Assuming you have a form with the ID 'eventForm'
