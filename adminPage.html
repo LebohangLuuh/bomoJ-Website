@@ -44,124 +44,108 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link active" style="color: #00a8e8;" href="adminPage.html">Post Event</a>
+        <a class="nav-link" href="#" data-toggle="modal" data-target="#loginModal">Admin</a>
       </li>
+
+      <!-- Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-center display-4" style="color: #054a29;" id="loginModalLabel">Admin Login</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" class="form-control" id="username" required>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
     </ul>
   </div>
 </nav>
 
 <h1 class="display-3 text-center pb-3" style="color: #bfd8bd; background-color: #054a29;">Post Event</h1>
-<!--  -->
 
 <div class="container mt-5 mb-4">
-  <!-- <form action="post_event.php" method="POST" enctype="multipart/form-data"> -->
-    <div class="row">
-          <div class="col-md-5">
-              <div class="form-group">
-                  <label for="eventImage" class="display-4" style="font-size: x-large; color: #054a29; font-weight: 400;">Choose Event Image</label>
-                  <input type="file" class="form-control-file" id="eventImage" name="event_image" onchange="previewImage(event)">
-              </div>
-              <img src="#" alt="Selected Image" id="selectedImage" class="img-fluid mt-3" style="display: none;">
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="eventTitle">Event Title</label>
-              <input type="text" class="form-control" id="eventTitle" name="event_title" required>
-          </div>
-          <div class="form-group">
-            <label for="eventDate">Event Date</label>
-            <input type="date" class="form-control" id="eventDate" name="event_date" required>
-            <small id="dateError" class="text-danger" style="display: none;">Event date should not be older than current date.</small>
-          </div>
-          
-          <script>
-            const eventDateInput = document.getElementById('eventDate');
-          
-            // Validate date on form submission
-            function validateDate() {
-              const selectedDate = new Date(eventDateInput.value);
-              const currentDate = new Date();
-          
-              if (selectedDate < currentDate) {
-                document.getElementById('dateError').style.display = 'block';
-                return false;
-              } else {
-                document.getElementById('dateError').style.display = 'none';
-                return true;
-              }
+
+  <form id="event-form">
+    <label for="title">Title:</label>
+    <input type="text" id="title" required><br>
+    <label for="description">Description:</label>
+    <textarea id="description" required></textarea><br>
+    <label for="date">Date:</label>
+    <input type="date" id="date" required><br>
+    <label for="time">Time:</label>
+    <input type="time" id="time" required><br>
+    <button type="button" style="border-color: #054a29; border-width: 2px; color: #00a8e8; border-radius: 25px;" onclick="createEvent(event)">Create Event</button>
+</form>
+
+<!-- Display existing events -->
+<h2 class="display-3 text-center" style="color: #054a29;">Existing Events</h2>
+<ul id="existing-events"></ul>
+
+  </div>
+  <script>
+    // Function to create event
+    function createEvent() {
+        const title = document.getElementById('title').value;
+        const description = document.getElementById('description').value;
+        const date = document.getElementById('date').value;
+        const time = document.getElementById('time').value;
+
+        const eventObj = { title, description, date, time };
+
+        const existingEvents = JSON.parse(localStorage.getItem('events')) || [];
+
+        existingEvents.push(eventObj);
+
+        localStorage.setItem('events', JSON.stringify(existingEvents));
+
+        displayEvent(eventObj);
+    }
+
+    // Function to display an event
+    function displayEvent(event) {
+        const existingEventsList = document.getElementById('existing-events');
+        const listItem = document.createElement('li');
+        listItem.textContent = `${event.title} - ${event.description} | ${event.date} ${event.time}`;
+        
+        // Create a delete button for the event
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.addEventListener('click', function () {
+            // Remove the event from the list and update local storage
+            listItem.remove();
+            const existingEvents = JSON.parse(localStorage.getItem('events')) || [];
+            const index = existingEvents.findIndex(e => e.title === event.title && e.description === event.description && e.date === event.date && e.time === event.time);
+            if (index !== -1) {
+                existingEvents.splice(index, 1);
+                localStorage.setItem('events', JSON.stringify(existingEvents));
             }
-          
-            document.querySelector('form').addEventListener('submit', function(event) {
-              if (!validateDate()) {
-                event.preventDefault();
-              }
-            });
-          </script>
-          
-          <div class="form-group">
-              <label for="eventDescription">Event Description</label>
-              <textarea class="form-control" id="eventDescription" name="event_description" rows="4" required></textarea>
-          </div>
-          <button type="submit" class="btn btn-primary align-content-end">Post Event</button>
-          </div>
-      </div>
-    
-  </form>
-</div>
-<script>
-  function previewImage(event) {
-      const selectedImage = document.getElementById('selectedImage');
-      selectedImage.style.display = 'block';
-      selectedImage.src = URL.createObjectURL(event.target.files[0]);
-  }
-</script>
-
-
-<!-- Add this script to fetch events and display them -->
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyCzjk-kIPaq0-XcM182Bx-2h7eY7DkrwCw",
-        authDomain: "bomojay-site.firebaseapp.com",
-        projectId: "bomojay-site",
-        storageBucket: "bomojay-site.appspot.com",
-        messagingSenderId: "850926706595",
-        appId: "1:850926706595:web:7d395a3fb00ac150d30416",
-        measurementId: "G-YF3Z90XTQ1"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-
-  // Function to fetch events from Firestore and display them
-  function fetchAndDisplayEvents() {
-    const eventsContainer = document.getElementById('events-container');
-
-    db.collection('events').get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          const eventData = doc.data();
-          const eventElement = document.createElement('div');
-          eventElement.classList.add('event');
-          eventElement.innerHTML = `
-            <h2>${eventData.event_title}</h2>
-            <p>Date: ${eventData.event_date}</p>
-            <p>${eventData.event_description}</p>
-            
-          `;
-          eventsContainer.appendChild(eventElement);
         });
-      })
-      .catch((error) => {
-        console.log('Error getting documents: ', error);
-      });
-  }
 
-  // Call the function when the page loads
-  window.addEventListener('load', fetchAndDisplayEvents);
+        listItem.appendChild(deleteButton);
+        existingEventsList.appendChild(listItem);
+    }
+
+    // Display existing events upon page load
+    window.onload = function () {
+        const existingEvents = JSON.parse(localStorage.getItem('events')) || [];
+        existingEvents.forEach(event => displayEvent(event));
+    };
 </script>
 
 <!-- footer -->
@@ -197,6 +181,8 @@
     </div>
   </div>
   
+  <script src="img_&_Vids/form.js"></script>
+
       <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

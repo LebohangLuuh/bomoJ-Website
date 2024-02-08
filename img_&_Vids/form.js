@@ -39,38 +39,20 @@ function validateForm() {
 }
 
 
-// for events page
 
-
-
-
-
-
-// Assuming you have a form with the ID 'eventForm'
-
-const eventForm = document.getElementById('eventForm');
-
-eventForm.addEventListener('submit', function(event) {
+document.getElementById('loginForm').addEventListener('submit', function(event) {
   event.preventDefault(); // Prevent form submission
 
-  // Get form data
-  const eventTitle = document.getElementById('eventTitle').value;
-  const eventDate = document.getElementById('eventDate').value;
-  const eventDescription = document.getElementById('eventDescription').value;
-  const eventImg = document.getElementById('selectedImage')
+  // Retrieve username and password values
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
 
-  // Add the event to Firestore
-  db.collection('events').add({
-    event_title: eventTitle,
-    event_date: eventDate,
-    event_description: eventDescription,
-    event_Img : eventImg
-  })
-  .then((docRef) => {
-    console.log('Event added with ID: ', docRef.id);
-    // You might want to display a success message or redirect the user
-  })
-  .catch((error) => {
-    console.error('Error adding event: ', error);
-  });
+  // Validate the credentials (this is a basic example)
+  if (username === 'admin' && password === 'password') {
+    // Redirect the user to the admin page
+    window.location.href = 'adminPage.html';
+  } else {
+    // Display an error message
+    alert('Invalid username or password. Please try again.');
+  }
 });

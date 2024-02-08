@@ -73,3 +73,14 @@ img:hover{
   transform: translateY(-2px);
   
 }
+
+/* CSS for the Login Modal */
+.modal {
+  z-index: 1050; /* Adjust this value as needed */
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+}
+
+.modal-backdrop {
+  display: none; /* Hide the backdrop */
+}
+
