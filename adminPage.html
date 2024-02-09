@@ -81,159 +81,163 @@
 
 <div class="container mt-5 mb-4">
   <div class="container">
-      <div class="row">
-          <div class="col-md-5">
-              <div class="form-group">
-                  <label for="event-image" class="display-4" style="color: #054a29; font-size: xx-large;">Event Image:</label>
-                  <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="event-image" accept="image/*" onchange="previewImage(event)">
-                      <label class="custom-file-label" for="event-image">Choose file</label>
-                  </div>
-                  <div id="preview-container"></div>
-              </div>
+    <div class="row">
+      <div class="col-md-5">
+        <div class="form-group">
+          <label for="event-image" class="display-4" style="color: #054a29; font-size: xx-large;">Event Image:</label>
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" id="event_image" accept="image/*" onchange="previewImage(event)">
+            <label class="custom-file-label" for="event-image">Choose file</label>
           </div>
-          <div class="col-md-5">
-              <form id="event-form">
-                  <div class="form-group">
-                      <label for="title">Title:</label>
-                      <input type="text" id="title" class="form-control" required>
-                  </div>
-                  <div class="form-group">
-                      <label for="description">Description:</label>
-                      <textarea id="description" class="form-control" required></textarea>
-                  </div>
-                  <div class="form-group">
-                      <label for="date">Date:</label>
-                      <input type="date" id="date" class="form-control" required>
-                  </div>
-                  <div class="form-group">
-                      <label for="time">Time:</label>
-                      <input type="time" id="time" class="form-control" required>
-                  </div>
-                  <button type="button" class="btn btn-primary" style="color: #bfd8bd; border-radius: 25px;" onclick="createEvent()">Create Event</button>
-              </form>
-          </div>
+          <div id="preview-container"></div>
+        </div>
       </div>
+      <div class="col-md-5">
+        <form id="event-form">
+          <div class="form-group">
+            <label for="title">Title:</label>
+            <input type="text" id="title" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea id="description" class="form-control" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="date">Date:</label>
+            <input type="date" id="date" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="time">Time:</label>
+            <input type="time" id="time" class="form-control" required>
+          </div>
+          <button type="button" id="create-event-button" class="btn btn-primary" style="color: #bfd8bd; border-radius: 25px;">Create Event</button>
+        </form>
+      </div>
+    </div>
   </div>
   <br>
   <hr style="border-color: #bfd8bd; border-width: 2px;">
 
   <!-- Display existing events -->
   <h2 class="display-3 text-center" style="color: #054a29;">Existing Events</h2>
-  <ul id="existing-events" class="list-group"></ul>
+  <ul id="existing-events" class="list-group">
+
+    <ul id="event-list">
+      <li>
+        <img id="event-image">
+        <h2 id="event-title"></h2>
+        <p id="event-description"></p>
+        <p id="event-date"></p>
+        <p id="event-time"></p>
+      </li>
+    </ul>
+
+  </ul>
 </div>
 
 <script>
-  function previewImage(event) {
-      const previewContainer = document.getElementById('preview-container');
-      previewContainer.innerHTML = ''; // Clear previous content
+  document.addEventListener("DOMContentLoaded", function() {
+    // Retrieve event details from localStorage
+    const eventDetails = localStorage.getItem("eventDetails");
+    if (eventDetails) {
+      const { image, title, description, date, time } = JSON.parse(eventDetails);
+      
+      // Display event details on the page
+      document.getElementById("event-image").src = image;
+      document.getElementById("event-title").textContent = title;
+      document.getElementById("event-description").textContent = description;
+      document.getElementById("event-date").textContent = date;
+      document.getElementById("event-time").textContent = time;
+    }
+  });
+</script>
 
-      const file = event.target.files[0];
-      const reader = new FileReader();
 
-      reader.onload = function() {
-          const image = document.createElement('img');
-          image.src = reader.result;
-          image.classList.add('img-fluid'); // Make the image responsive
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const createEventButton = document.getElementById("create-event-button");
+    createEventButton.addEventListener("click", createEvent);
 
-          previewContainer.appendChild(image);
-      };
+    displayExistingEvents();
+  });
 
-      if (file) {
-          reader.readAsDataURL(file);
+  function createEvent() {
+    const image = document.getElementById("event_image").value;
+    const title = document.getElementById("title").value;
+    const description = document.getElementById("description").value;
+    const date = document.getElementById("date").value;
+    const time = document.getElementById("time").value;
+    
+    if (!image || !title || !description || !date || !time) {
+      alert("Please fill in all the fields");
+      return;
+    }
 
-          // Update the label with the selected file name
-          const fileName = file.name;
-          const label = document.querySelector('.custom-file-label');
-          label.innerText = fileName;
-      }
+    const eventDetails = { image, title, description, date, time };
+    localStorage.setItem("eventDetails", JSON.stringify(eventDetails));
+
+    alert("Event created successfully!");
+
+    document.getElementById("event_image").value = "";
+    document.getElementById("title").value = "";
+    document.getElementById("description").value = "";
+    document.getElementById("date").value = "";
+    document.getElementById("time").value = "";
+
+    displayEvent(eventDetails);
   }
 
-// Function to create event
-function createEvent() {
-    const title = document.getElementById('title').value;
-    const description = document.getElementById('description').value;
-    const date = document.getElementById('date').value;
-    const time = document.getElementById('time').value;
-    const image = document.getElementById('event-image').files[0]; // Get the selected image file
+  function previewImage(event) {
+    const previewContainer = document.getElementById('preview-container');
+    previewContainer.innerHTML = ''; // Clear previous content
 
+    const file = event.target.files[0];
     const reader = new FileReader();
-    reader.onload = function(event) {
-        const eventObj = { title, description, date, time, imageSrc: event.target.result }; // Store image data as base64 string
-        const existingEvents = JSON.parse(localStorage.getItem('events')) || [];
-        existingEvents.push(eventObj);
-        localStorage.setItem('events', JSON.stringify(existingEvents));
-        displayEvent(eventObj);
 
-        // Add event to the existing events list below
-        const existingEventsList = document.getElementById('existing-events');
-        const listItem = document.createElement('li');
-        listItem.classList.add('list-group-item');
-        listItem.textContent = `${eventObj.title} - ${eventObj.description} | ${eventObj.date} ${eventObj.time}`;
-        existingEventsList.appendChild(listItem);
+    reader.onload = function() {
+      const image = document.createElement('img');
+      image.src = reader.result;
+      image.classList.add('img-fluid'); 
 
-        // Clear form fields after creating event
-        document.getElementById('title').value = '';
-        document.getElementById('description').value = '';
-        document.getElementById('date').value = '';
-        document.getElementById('time').value = '';
-        document.getElementById('event-image').value = '';
-        document.querySelector('.custom-file-label').innerText = 'Choose file';
-        document.getElementById('preview-container').innerHTML = ''; // Clear preview container
+      previewContainer.appendChild(image);
     };
-    reader.readAsDataURL(image); // Read the image as data URL
-}
 
+    if (file) {
+      reader.readAsDataURL(file);
 
-// Function to display an event
-function displayEvent(event) {
+      const fileName = file.name;
+      const label = document.querySelector('.custom-file-label');
+      label.innerText = fileName;
+    }
+  }
+
+  function displayEvent(event) {
     const existingEventsList = document.getElementById('existing-events');
     const listItem = document.createElement('li');
     listItem.classList.add('list-group-item');
 
-    // Create an image element for the event
     const image = document.createElement('img');
-    image.src = event.imageSrc; // Assuming you have a property named imageSrc in your event object
-    image.classList.add('img-thumbnail', 'mr-3'); // Add Bootstrap classes for styling
+    image.src = event.image; 
+    image.classList.add('img-thumbnail', 'mr-3'); 
     listItem.appendChild(image);
 
-    // Create a div to hold the event details
     const eventDetails = document.createElement('div');
-    // Add title, description, date, and time to the event details
     eventDetails.innerHTML = `<h4>${event.title}</h4>
                               <p>${event.description}</p>
                               <p>Date: ${event.date}</p>
                               <p>Time: ${event.time}</p>`;
 
-    // Create a delete button for the event
-    const deleteButton = document.createElement('button');
-    deleteButton.textContent = 'Delete';
-    deleteButton.classList.add('btn', 'btn-danger', 'btn-sm', 'ml-2');
-    deleteButton.addEventListener('click', function () {
-        // Remove the event from the list and update local storage
-        listItem.remove();
-        const existingEvents = JSON.parse(localStorage.getItem('events')) || [];
-        const index = existingEvents.findIndex(e => e.title === event.title && e.description === event.description && e.date === event.date && e.time === event.time);
-        if (index !== -1) {
-            existingEvents.splice(index, 1);
-            localStorage.setItem('events', JSON.stringify(existingEvents));
-        }
-    });
-
-    // Append event details and delete button to the list item
     listItem.appendChild(eventDetails);
-    listItem.appendChild(deleteButton);
 
-    // Append list item to the existing events list
     existingEventsList.appendChild(listItem);
-}
+  }
 
-
-  // Display existing events upon page load
-  window.onload = function () {
-      const existingEvents = JSON.parse(localStorage.getItem('events')) || [];
-      existingEvents.forEach(event => displayEvent(event));
-  };
+  function displayExistingEvents() {
+    const existingEvents = JSON.parse(localStorage.getItem('eventDetails')) || [];
+    existingEvents.forEach(event => {
+      displayEvent(event);
+    });
+  }
 </script>
 
 <!-- footer -->

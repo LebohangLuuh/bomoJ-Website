@@ -79,34 +79,33 @@
 <h1 class="display-3 text-center " style="color: #bfd8bd; background-color: #054a29; padding-bottom: 10px;">Upcoming Events</h1>
 
 <div id="events-container" class="container mt-5 mb-4">
-
-  <ul id="event-list"></ul>
-<script>
-    // Retrieve existing events from local storage
-    const existingEvents = JSON.parse(localStorage.getItem('events')) || [];
-    
-    // Retrieve new event from local storage
-    const newEvent = JSON.parse(localStorage.getItem('newEvent'));
-
-    // Add new event to existing events if available
-    if (newEvent) {
-        existingEvents.push(newEvent);
-        localStorage.removeItem('newEvent'); // Remove the new event after adding it
-    }
-
-    // Display events
-    const eventList = document.getElementById('event-list');
-    existingEvents.forEach(event => {
-        const listItem = document.createElement('li');
-        listItem.textContent = `${event.title} - ${event.description} | ${event.date} ${event.time}`;
-        eventList.appendChild(listItem);
-    });
-    
-    // Save events to local storage after any modifications
-    localStorage.setItem('events', JSON.stringify(existingEvents));
-</script>
-
+  <ul id="event-list">
+    <li>
+      <img id="event-image">
+      <h2 id="event-title"></h2>
+      <p id="event-description"></p>
+      <p id="event-date"></p>
+      <p id="event-time"></p>
+    </li>
+  </ul>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // Retrieve event details from localStorage
+    const eventDetails = localStorage.getItem("eventDetails");
+    if (eventDetails) {
+      const { image, title, description, date, time } = JSON.parse(eventDetails);
+      
+      // Display event details on the page
+      document.getElementById("event-image").src = image;
+      document.getElementById("event-title").textContent = title;
+      document.getElementById("event-description").textContent = description;
+      document.getElementById("event-date").textContent = date;
+      document.getElementById("event-time").textContent = time;
+    }
+  });
+</script>
 
 
 <!-- footer -->
