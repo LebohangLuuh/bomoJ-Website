@@ -43,7 +43,7 @@
         <a class="nav-link" href="Gallery.html">Gallery</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#" data-toggle="modal" data-target="#loginModal">Admin</a>
+        <a class="nav-link" href="#" data-toggle="modal" data-target="#loginModal"> <i class="fas fa-user-circle"></i> Admin</a>
       </li>
 
       <!-- Login Modal -->
@@ -66,7 +66,7 @@
             <label for="password">Password</label>
             <input type="password" class="form-control" id="password" required>
           </div>
-          <button type="submit" class="btn btn-primary">Login</button>
+          <button type="submit" class="btn btn-primary" style="color: #bfd8bd; border-radius: 25px;">Login</button>
         </form>
       </div>
     </div>
@@ -81,30 +81,30 @@
 <div id="events-container" class="container mt-5 mb-4">
 
   <ul id="event-list"></ul>
-  <script>
-      // Retrieve new event from local storage
-      const newEvent = JSON.parse(localStorage.getItem('newEvent'));
+<script>
+    // Retrieve existing events from local storage
+    const existingEvents = JSON.parse(localStorage.getItem('events')) || [];
+    
+    // Retrieve new event from local storage
+    const newEvent = JSON.parse(localStorage.getItem('newEvent'));
 
-      // Retrieve existing events from local storage
-      const existingEvents = JSON.parse(localStorage.getItem('events')) || [];
-      
-      // Add new event to existing events
-      if (newEvent) {
-          existingEvents.push(newEvent);
-          localStorage.removeItem('newEvent');
-      }
+    // Add new event to existing events if available
+    if (newEvent) {
+        existingEvents.push(newEvent);
+        localStorage.removeItem('newEvent'); // Remove the new event after adding it
+    }
 
-      // Display events
-      const eventList = document.getElementById('event-list');
-      existingEvents.forEach(event => {
-          const listItem = document.createElement('li');
-          listItem.textContent = `${event.title} - ${event.description} | ${event.date} ${event.time}`;
-          eventList.appendChild(listItem);
-      });
-      
-      // Save events to local storage
-      localStorage.setItem('events', JSON.stringify(existingEvents));
-  </script>
+    // Display events
+    const eventList = document.getElementById('event-list');
+    existingEvents.forEach(event => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${event.title} - ${event.description} | ${event.date} ${event.time}`;
+        eventList.appendChild(listItem);
+    });
+    
+    // Save events to local storage after any modifications
+    localStorage.setItem('events', JSON.stringify(existingEvents));
+</script>
 
 </div>
 

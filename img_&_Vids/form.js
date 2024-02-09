@@ -5,7 +5,6 @@ function validateForm() {
     const emailInput = document.getElementById('emailInput').value;
     const messageInput = document.getElementById('exampleFormControlTextarea1').value.trim();
 
-    // Regular expression to validate name without numbers
     const nameRegex = /^[A-Za-z\s]+$/;
     const validNameLength = nameInput.length >= 3 && nameInput.length <= 50;
 
@@ -18,7 +17,7 @@ function validateForm() {
         document.getElementById('nameError').textContent = '';
     }
 
-    // Regular expression to validate email
+    // Regular expression 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailRegex.test(emailInput)) {
@@ -41,18 +40,18 @@ function validateForm() {
 
 
 document.getElementById('loginForm').addEventListener('submit', function(event) {
-  event.preventDefault(); // Prevent form submission
+  event.preventDefault(); 
 
   // Retrieve username and password values
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
 
   // Validate the credentials (this is a basic example)
-  if (username === 'admin' && password === 'password') {
-    // Redirect the user to the admin page
+  if (username === 'BOMOJAY' && password === 'BOMOJ@Y') {
+  
     window.location.href = 'adminPage.html';
   } else {
-    // Display an error message
+    
     alert('Invalid username or password. Please try again.');
   }
 });
